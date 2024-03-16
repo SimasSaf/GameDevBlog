@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.015113503, g: 0.009046664, b: 0.014094996, a: 1}
+  m_IndirectSpecularColor: {r: 0.005047329, g: 0.005106305, b: 0.005047329, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -275,6 +275,54 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   menuCanvas: {fileID: 763312273}
+--- !u!1 &601716641
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 601716643}
+  - component: {fileID: 601716642}
+  m_Layer: 0
+  m_Name: PoolManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &601716642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 601716641}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 562f4ba50b09df6429c6265e3d91ffb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyPrefabs:
+  - {fileID: 3761954072492384064, guid: bd7983f36dd41e34f8904fa8166a1870, type: 3}
+  - {fileID: 4128482677949448021, guid: a8a18338ea6072d40a211fab6c63ca82, type: 3}
+  poolSize: 100
+--- !u!4 &601716643
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 601716641}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.8857622, y: 1.821951, z: 0.03467568}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -923,9 +971,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d1e7a4d66549d940b3c41848c20cc38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefabs:
-  - {fileID: 3761954072492384064, guid: bd7983f36dd41e34f8904fa8166a1870, type: 3}
-  - {fileID: 4128482677949448021, guid: a8a18338ea6072d40a211fab6c63ca82, type: 3}
   spawnRate: 2
   spawnDistance: 10
   earthTransform: {fileID: 1733874002}
@@ -1864,3 +1909,4 @@ SceneRoots:
   - {fileID: 648541939}
   - {fileID: 1236468124}
   - {fileID: 1428902330}
+  - {fileID: 601716643}

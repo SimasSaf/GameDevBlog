@@ -5,7 +5,7 @@ public class EnemyPoolManager : MonoBehaviour
 {
     public static EnemyPoolManager Instance;
 
-    [SerializeField] private GameObject enemyPrefab;
+    [SerializeField] private GameObject[] enemyPrefabs;
     [SerializeField] private int poolSize = 10;
     private Queue<GameObject> enemyPool = new Queue<GameObject>();
 
@@ -19,10 +19,17 @@ public class EnemyPoolManager : MonoBehaviour
     {
         for (int i = 0; i < poolSize; i++)
         {
-            GameObject enemy = Instantiate(enemyPrefab);
+            GameObject enemy = InstantiateRandomPrefab();
             enemy.SetActive(false);
             enemyPool.Enqueue(enemy);
         }
+    }
+
+    private GameObject InstantiateRandomPrefab()
+    {
+        int randomIndex = Random.Range(0, enemyPrefabs.Length);
+        GameObject randomPrefab = enemyPrefabs[randomIndex];
+        return Instantiate(randomPrefab);
     }
 
     public GameObject GetPooledEnemy()
@@ -36,7 +43,7 @@ public class EnemyPoolManager : MonoBehaviour
         else
         {
             // Optionally expand the pool if all enemies are in use
-            GameObject newEnemy = Instantiate(enemyPrefab);
+            GameObject newEnemy = InstantiateRandomPrefab();
             newEnemy.SetActive(true);
             return newEnemy;
         }

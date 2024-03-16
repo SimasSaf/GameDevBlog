@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class EnemySpawnManager : MonoBehaviour
 {
-    public GameObject[] enemyPrefabs; // Assign your enemy prefabs
     public float spawnRate = 2f; // Time between spawns
     public float spawnDistance = 10f; // Distance from the Earth to spawn enemies
     public Transform earthTransform; // Assign the Earth's transform
@@ -13,7 +12,7 @@ public class EnemySpawnManager : MonoBehaviour
 
     void Update()
     {
-        if (spawnEnemies && Time.time >= nextSpawnTime && enemyPrefabs.Length > 0)
+        if (spawnEnemies && Time.time >= nextSpawnTime)
         {
             for (int i = 0; i < enemiesPerSpawn; i++)
             {
