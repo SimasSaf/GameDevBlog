@@ -8,7 +8,7 @@ public class BulletBehavior : MonoBehaviour
     {
         bulletProperties = bullet;
         // Here, you can add code to change the GameObject's behavior based on bulletProperties
-        // For example, changing the appearance or enabling certain effects
+        // For example, changing the appearance or enabling certain effects such as isOnFire or isLaser
     }
 
     void OnCollisionEnter2D(Collision2D collision)
