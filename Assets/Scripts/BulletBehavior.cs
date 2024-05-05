@@ -2,26 +2,30 @@ using UnityEngine;
 
 public class BulletBehavior : MonoBehaviour
 {
-    public Bullet bulletProperties; // Holds the specific properties of the bullet
+    public Bullet bulletProperties;
+
+    private float boundsOffset = 5f; // How far a bullet can go outside the camera view before being deactivated
 
     public void Initialize(Bullet bullet)
     {
         bulletProperties = bullet;
-        // Here, you can add code to change the GameObject's behavior based on bulletProperties
-        // For example, changing the appearance or enabling certain effects such as isOnFire or isLaser
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        // Print the collision to the console
-        print("Collision with " + collision.gameObject.name);
-
-        // Check if the collided object has the "Enemy" tag
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            // Destroy the enemy GameObject
             Destroy(collision.gameObject);
             Destroy(gameObject);
         }
     }   
+
+    void destroyBulletIfLeftScreen(){
+        Vector2 screenPosition = Camera.main.WorldToViewportPoint(transform.position);
+        if (screenPosition.x < -boundsOffset || screenPosition.x > 1 + boundsOffset ||
+            screenPosition.y < -boundsOffset || screenPosition.y > 1 + boundsOffset)
+        {
+            BulletSpawnManager.Instance.ReturnBulletToPool(gameObject);
+        }
+    }
 }
