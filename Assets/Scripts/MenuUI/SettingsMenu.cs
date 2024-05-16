@@ -5,20 +5,13 @@ public class SettingsMenu : MonoBehaviour
 {
     public bool cameFromMainMenu;
     public AudioMixer audioMixer;
-    private GameObject mainMenuGO;
-    private GameObject settingsMenuGO;
-    private GameObject pauseMenuGO;
-    private MenuUiController menuUiController;
-
+    private IMenuUIController iMenuUiController;
     private bool isFullscreen = false;
 
     void Awake()
     {
-        mainMenuGO = GameObject.Find("MainMenu");
-        settingsMenuGO = GameObject.Find("SettingsMenu");
-        pauseMenuGO = GameObject.Find("PauseMenu");
-        menuUiController = FindObjectOfType<MenuUiController>();
-    } 
+        iMenuUiController = FindAnyObjectByType<MenuUiController>();
+    }
 
     public void SetVolume(float volume)
     {
@@ -27,13 +20,13 @@ public class SettingsMenu : MonoBehaviour
 
     public void ToggleFullscreen()
     {
-        if(isFullscreen){
-            Debug.Log("Setting to false was true " + isFullscreen);
+        if (isFullscreen)
+        {
             isFullscreen = false;
             Screen.fullScreen = isFullscreen;
         }
-        else {
-            Debug.Log("Setting to true was false " + isFullscreen);
+        else
+        {
             isFullscreen = true;
             Screen.fullScreen = isFullscreen;
         }
@@ -41,27 +34,6 @@ public class SettingsMenu : MonoBehaviour
 
     public void Back()
     {
-        if (cameFromMainMenu)
-        {
-            BackToMainMenu();
-        }
-        else
-        {
-            BackToPauseMenu();
-        }
-    }
-
-    private void BackToMainMenu()
-    {
-        settingsMenuGO.SetActive(false);
-        mainMenuGO.SetActive(true);
-        menuUiController.SetFirstSelected(mainMenuGO);
-    }
-
-    private void BackToPauseMenu()
-    {
-        settingsMenuGO.SetActive(false);
-        pauseMenuGO.SetActive(true);
-        menuUiController.SetFirstSelected(pauseMenuGO);
+        iMenuUiController.NavigateBackFromSettings();
     }
 }

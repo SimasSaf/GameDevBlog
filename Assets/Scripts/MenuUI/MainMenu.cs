@@ -2,49 +2,20 @@ using UnityEngine;
 
 public class MainMenu : MonoBehaviour
 {
-    private EnemySpawnManager enemySpawnManager;
-    private GameObject mainMenuGO;
-    private GameObject settingsMenuGO;
-    private CameraMovement cameraMovement;
-    private SettingsMenu settingsMenu;
-    private MenuUiController menuUiController;
+    private IMenuUIController iMenuUiController;
 
     void Awake()
     {
-        mainMenuGO = GameObject.Find("MainMenu");
-        settingsMenuGO = GameObject.Find("SettingsMenu");
-        cameraMovement = FindObjectOfType<CameraMovement>();
-        enemySpawnManager = FindObjectOfType<EnemySpawnManager>();
-        settingsMenu = FindObjectOfType<SettingsMenu>();
-        menuUiController = FindObjectOfType<MenuUiController>();
+        iMenuUiController = FindAnyObjectByType<MenuUiController>();
     }
-
     public void OnSinglePlayerButtonPressed()
     {
-        if (cameraMovement != null)
-        {
-            cameraMovement.MoveToEarth();
-            HideMainMenu();
-            enemySpawnManager.StartSpawningEnemies();
-            HideMainMenu();
-        }
-        else
-        {
-            Debug.LogError("CameraMovement script is not assigned in the UIManager.");
-        }
-    }
-
-    public void HideMainMenu()
-    {
-        mainMenuGO.SetActive(false);
+        iMenuUiController.StartGame();
     }
 
     public void Settings()
     {
-        settingsMenu.cameFromMainMenu = true;
-        mainMenuGO.SetActive(false);
-        settingsMenuGO.SetActive(true);
-        menuUiController.SetFirstSelected(settingsMenuGO);
+        iMenuUiController.NavigateToSettings(this);
     }
 
     public void Exit()
