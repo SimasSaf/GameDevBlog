@@ -99,9 +99,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78fd1209a45b2674993abfc06be46cac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damageNumberPrefab: {fileID: 7567083928047009298, guid: 0d8cfa568f19a6d4baeb6835392d20c8, type: 3}
+  explosionPrefab: {fileID: 7841964895255008832, guid: c3cdacd725cd4024586c4d60526171f9, type: 3}
   health: 0
-  speed: 0
   experienceGiven: 10
+  explosionRadius: 2
+  explosionDamage: 10
+  fireDamageInterval: 1
 --- !u!114 &2936750345477694826
 MonoBehaviour:
   m_ObjectHideFlags: 0

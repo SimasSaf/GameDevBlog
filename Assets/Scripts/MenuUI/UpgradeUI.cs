@@ -1,6 +1,6 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI; // Required for accessing Button components
+using UnityEngine.UI;
 
 public class UpgradeUI : MonoBehaviour
 {
@@ -9,29 +9,37 @@ public class UpgradeUI : MonoBehaviour
     private IMenuUIController iMenuUIController;
     private ILevelingSystemOR levelingSystemOR;
     private IBulletSpawnManager iBulletSpawnManager;
-    string baseName = "Upgrade";
+    private string baseName = "Upgrade";
     private int numberOfUpgrades = 4;
+    private GameObject[] upgradeInstances;
 
     void Awake()
     {
         iMenuUIController = FindObjectOfType<MenuUiController>();
         levelingSystemOR = FindObjectOfType<LevelingSystem>();
         iBulletSpawnManager = FindObjectOfType<BulletSpawnManager>();
+
+        // Initialize upgrades
+        InitializeUpgrades(numberOfUpgrades, new Vector3(-150, 0, 0));
     }
 
     void Start()
     {
-        SpawnUpgrades(numberOfUpgrades, new Vector3(-150, 0, 0));
+        // Make upgrades visible
+        MakeUpgradesVisible();
     }
 
-    public void SpawnUpgrades(int count, Vector3 startPosition)
+    private void InitializeUpgrades(int count, Vector3 startPosition)
     {
+        Debug.Log("Initializing upgrades");
         GameObject upgradeMenu = GameObject.Find("UpgradeMenu");
         if (upgradeMenu == null)
         {
             Debug.LogError("Failed to find UpgradeMenu in the scene.");
             return;
         }
+
+        upgradeInstances = new GameObject[count];
 
         for (int i = 0; i < count; i++)
         {
@@ -48,19 +56,38 @@ public class UpgradeUI : MonoBehaviour
                 upgradeMenu.transform
             );
             newUpgrade.name = baseName + i;
-            newUpgrade.SetActive(true);
+            newUpgrade.SetActive(false);
 
             SetupButton(newUpgrade, i);
             SetupUpgradeName(newUpgrade, i);
             newUpgrade.transform.localPosition = position;
+
+            upgradeInstances[i] = newUpgrade;
         }
     }
 
-    void SetupButton(GameObject upgrade, int index)
+    private void MakeUpgradesVisible()
+    {
+        foreach (var upgrade in upgradeInstances)
+        {
+            upgrade.SetActive(true);
+        }
+    }
+
+    private void SetupButton(GameObject upgrade, int index)
     {
         Button button = upgrade.transform.GetChild(1).GetComponent<Button>();
         if (button != null)
         {
+            // Copy the Button settings from the prefab to ensure colors are transferred
+            Button prefabButton = upgradePrefab.transform.GetChild(1).GetComponent<Button>();
+            if (prefabButton != null)
+            {
+                button.colors = prefabButton.colors;
+                button.transition = prefabButton.transition;
+                button.spriteState = prefabButton.spriteState;
+            }
+
             button.onClick.RemoveAllListeners();
 
             switch (index)
@@ -105,7 +132,7 @@ public class UpgradeUI : MonoBehaviour
         }
     }
 
-    void SetupUpgradeName(GameObject upgrade, int index)
+    private void SetupUpgradeName(GameObject upgrade, int index)
     {
         TextMeshProUGUI upgradeName = upgrade.GetComponentInChildren<TextMeshProUGUI>();
         if (upgradeName != null)

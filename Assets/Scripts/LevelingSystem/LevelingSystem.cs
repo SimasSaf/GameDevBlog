@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelingSystem : MonoBehaviour, ILevelingSystemOR, ILeveling
+public class LevelingSystem : MonoBehaviour, ILevelingSystemOR, ILeveling, ILevelTracker
 {
     private int experience = 0;
     private int level = 0;
@@ -25,7 +25,7 @@ public class LevelingSystem : MonoBehaviour, ILevelingSystemOR, ILeveling
     {
         experience = 0;
         level = 0;
-        experienceToNextLevel = 100;
+        experienceToNextLevel = 10;
         NotifyOnReset();
     }
 
@@ -69,5 +69,10 @@ public class LevelingSystem : MonoBehaviour, ILevelingSystemOR, ILeveling
         {
             observer.OnAddExperience(experience, experienceToNextLevel);
         }
+    }
+
+    public int getLevel()
+    {
+        return level;
     }
 }

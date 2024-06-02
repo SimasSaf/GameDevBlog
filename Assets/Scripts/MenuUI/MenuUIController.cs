@@ -36,6 +36,7 @@ public class MenuUiController
     private GameObject settingsMenuGO;
     private GameObject mainMenuGO;
     private GameObject gameOverScreenGO;
+    private GameObject upgradeMenuGO;
 
     private void Awake()
     {
@@ -43,6 +44,7 @@ public class MenuUiController
         mainMenuGO = GameObject.Find("MainMenu");
         settingsMenuGO = GameObject.Find("SettingsMenu");
         gameOverScreenGO = GameObject.Find("GameOverScreen");
+        upgradeMenuGO = GameObject.Find("UpgradeMenu");
 
         iUIActivator = FindObjectOfType<UIActivator>();
         iIngameUI = FindAnyObjectByType<IngameUI>();
@@ -113,10 +115,24 @@ public class MenuUiController
         Selectable firstSelectable = menu.GetComponentInChildren<Selectable>();
         if (firstSelectable != null)
         {
+            Debug.Log("first: " + firstSelectable.name);
             eventSystem.SetSelectedGameObject(firstSelectable.gameObject);
         }
         else
         {
+            // Check one level deeper
+            foreach (Transform child in menu.transform)
+            {
+                firstSelectable = child.GetComponentInChildren<Selectable>();
+                if (firstSelectable != null)
+                {
+                    Debug.Log("one level deeper: " + firstSelectable.name);
+                    eventSystem.SetSelectedGameObject(firstSelectable.gameObject);
+                    return;
+                }
+            }
+
+            // If no Selectable found in immediate or one level deeper
             Debug.LogError("No selectable component found in " + menu.name);
         }
     }
@@ -146,6 +162,7 @@ public class MenuUiController
         iUIActivator.DeactivatePauseMenu();
         iUIActivator.DeactivateSettingsMenu();
         iUIActivator.DeactivateIngameUI();
+        iUIActivator.DeactivateGameOverScreen();
 
         enemySpawnManager.StopSpawningEnemies();
         enemyPoolManager.DeactivateAllEnemies();
@@ -154,6 +171,7 @@ public class MenuUiController
 
         iUIActivator.ActivateMainMenu();
         SetFirstSelected(mainMenuGO);
+
         Time.timeScale = 1f;
     }
 
@@ -166,6 +184,7 @@ public class MenuUiController
         iUIActivator.DeactivatePauseMenu();
 
         iUIActivator.ActivateGameOverScreen();
+        SetFirstSelected(gameOverScreenGO);
     }
 
     public void ResumeGame()
@@ -238,6 +257,7 @@ public class MenuUiController
         iIngameUI.LevelUp(level);
         Pause();
         iUIActivator.ActivateUpgradeMenu();
+        SetFirstSelected(upgradeMenuGO);
     }
 
     public void OnReset()

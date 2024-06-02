@@ -1,6 +1,10 @@
 using UnityEngine;
 
-public class BulletSpawnManager : MonoBehaviour, IBulletSpawnManager, IBulletSplit
+public class BulletSpawnManager
+    : MonoBehaviour,
+        IBulletSpawnManager,
+        IBulletSplit,
+        ILevelingSystemObserver
 {
     private IBulletPoolManger iBulletPoolManager;
 
@@ -26,6 +30,8 @@ public class BulletSpawnManager : MonoBehaviour, IBulletSpawnManager, IBulletSpl
     [SerializeField]
     private float nextFireTime;
 
+    private LevelingSystem levelingSystem;
+
     private void Awake()
     {
         damage = 10;
@@ -40,6 +46,20 @@ public class BulletSpawnManager : MonoBehaviour, IBulletSpawnManager, IBulletSpl
 
         iSoundEffectManager = FindAnyObjectByType<AudioManager>();
         iBulletPoolManager = FindAnyObjectByType<BulletPoolManager>();
+        levelingSystem = FindAnyObjectByType<LevelingSystem>();
+
+        if (levelingSystem != null)
+        {
+            levelingSystem.RegisterObserver(this);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (levelingSystem != null)
+        {
+            levelingSystem.UnregisterObserver(this);
+        }
     }
 
     void Update()
@@ -129,4 +149,17 @@ public class BulletSpawnManager : MonoBehaviour, IBulletSpawnManager, IBulletSpl
             bulletBehavior.Initialize(bullet);
         }
     }
+
+    public void OnLevelUp(int newLevel) { }
+
+    public void OnReset()
+    {
+        damage = 10;
+        bulletSpeed = 5f;
+        fireRate = 0.5f;
+        splitLevel = 0;
+        fireLevel = 0;
+    }
+
+    public void OnAddExperience(int experience, int experienceToNextLevel) { }
 }

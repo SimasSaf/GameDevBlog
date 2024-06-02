@@ -14,6 +14,7 @@ public class IngameUI : MonoBehaviour, IIngameUI
         GameObject levelObject = GameObject.Find("Level");
         GameObject expBarFillObject = GameObject.Find("expBarFill");
 
+
         level = levelObject.GetComponent<TextMeshProUGUI>();
         healthCounter = healthCounterObject.GetComponent<TextMeshProUGUI>();
 
@@ -38,14 +39,12 @@ public class IngameUI : MonoBehaviour, IIngameUI
 
     public void LevelUp(int level)
     {
-        Debug.Log("Leveling up: " + level);
         expBarFill.fillAmount = 0.0f;
         this.level.text = "" + level;
     }
 
     public void AddExperience(int experience, int experienceToNextLevel)
     {
-        Debug.Log("Ingamui UI adding exprience: " + experience + "/" + experienceToNextLevel);
         expBarFill.fillAmount = (float)experience / experienceToNextLevel;
     }
 }

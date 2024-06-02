@@ -1,9 +1,9 @@
 using UnityEngine;
 
-public class EnemySpawnManager : MonoBehaviour
+public class EnemySpawnManager : MonoBehaviour, ILevelingSystemObserver
 {
     [SerializeField]
-    private int health = 30;
+    private int health;
 
     [SerializeField]
     private float speed;
@@ -18,21 +18,32 @@ public class EnemySpawnManager : MonoBehaviour
     [SerializeField]
     private Transform enemyParentTransform;
 
+    private ILevelTracker levelTracker;
+
     private void Awake()
     {
         GameObject enemiesParent = GameObject.Find("PoolManager/Enemies");
         enemyParentTransform = enemiesParent.transform;
         earthTransform = GameObject.Find("Earth").transform;
+        levelTracker = FindAnyObjectByType<LevelingSystem>();
+
+        if (levelTracker is LevelingSystem levelingSystem)
+        {
+            levelingSystem.RegisterObserver(this);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (levelTracker is LevelingSystem levelingSystem)
+        {
+            levelingSystem.UnregisterObserver(this);
+        }
     }
 
     private void Start()
     {
-        speed = 0.5f;
-        spawnRate = 10f;
-        spawnDistanceMin = 0f;
-        spawnDistanceMax = 10f;
-        enemiesPerSpawn = 30;
-        nextSpawnTime = 1f;
+        OnReset();
     }
 
     void Update()
@@ -65,14 +76,15 @@ public class EnemySpawnManager : MonoBehaviour
             if (enemyMovement != null)
             {
                 enemyMovement.target = earthTransform;
-                Debug.Log("Setting speed");
                 enemyMovement.speed = speed;
             }
 
             EnemyBehavior enemyBehavior = enemyInstance.GetComponent<EnemyBehavior>();
             if (enemyBehavior != null)
             {
-                Enemy enemy = new Enemy(health, speed);
+                int enemyHealth = health + (10 * levelTracker.getLevel());
+                float enemySpeed = speed + (0.1f * levelTracker.getLevel());
+                Enemy enemy = new Enemy(enemyHealth, enemySpeed);
                 enemyBehavior.Initialize(enemy);
             }
         }
@@ -112,4 +124,20 @@ public class EnemySpawnManager : MonoBehaviour
 
         return spawnPoint;
     }
+
+    // ILevelingSystemObserver implementation
+    public void OnLevelUp(int newLevel) { }
+
+    public void OnReset()
+    {
+        health = 30;
+        speed = 0.2f;
+        spawnRate = 10f;
+        spawnDistanceMin = 0f;
+        spawnDistanceMax = 10f;
+        enemiesPerSpawn = 30;
+        nextSpawnTime = 1f;
+    }
+
+    public void OnAddExperience(int experience, int experienceToNextLevel) { }
 }
