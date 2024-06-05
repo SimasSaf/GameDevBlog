@@ -95,7 +95,7 @@ public class UpgradeUI : MonoBehaviour
                     button.onClick.AddListener(() =>
                     {
                         // damage
-                        iBulletSpawnManager.IncreaseBulletProperties(10, null, null, null);
+                        iBulletSpawnManager.IncreaseBulletProperties(5, null, null, null);
                         iMenuUIController.ResumeGame();
                     });
                     break;

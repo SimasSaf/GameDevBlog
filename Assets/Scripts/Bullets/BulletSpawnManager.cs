@@ -76,7 +76,7 @@ public class BulletSpawnManager
     {
         if (damage.HasValue)
         {
-            this.damage += damage.Value;
+            this.damage += 5;
         }
 
         if (fireRate.HasValue)

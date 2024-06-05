@@ -18,11 +18,10 @@ public class EnemyBehavior : MonoBehaviour
     [SerializeField]
     private float explosionRadius = 10f;
 
-    [SerializeField]
-    private int explosionDamage = 10;
+    private int explosionDamage = 5;
 
     [SerializeField]
-    private float fireDamageInterval = 1f; // How often to take dmg
+    private float fireDamageInterval = 1f;
 
     [SerializeField]
     private int scaleFireDamage = 2; // Fire damage is fire level * this number
@@ -55,7 +54,6 @@ public class EnemyBehavior : MonoBehaviour
 
     void OnEnable()
     {
-        // Resetting state for when we again reuse this
         isOnFire = false;
         fireDamageTimer = fireDamageInterval;
         ResetState();
@@ -147,7 +145,6 @@ public class EnemyBehavior : MonoBehaviour
 
         EnemyPoolManager.Instance.ReturnEnemyToPool(gameObject);
     }
-
     public void TakeDamage(int damage)
     {
         ShowDamageNumber(damage);
@@ -170,7 +167,7 @@ public class EnemyBehavior : MonoBehaviour
         Explosion explosionScript = explosion.GetComponent<Explosion>();
         if (explosionScript != null)
         {
-            explosionDamage = explosionDamage * enemy.fireLevel - 20;
+            explosionDamage = 5 * enemy.fireLevel - 10;
 
             explosionScript.Initialize(explosionDamage, enemy.fireLevel, explosionRadius);
         }

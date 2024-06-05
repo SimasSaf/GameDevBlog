@@ -9,23 +9,29 @@ public class EnemyPoolManager : MonoBehaviour
     private GameObject[] enemyPrefabs;
 
     [SerializeField]
-    private int poolSize = 50;
+    private int poolSize = 30;
+        private bool increasedPoolLvl20 = false;
+
+    private bool increasedPoolLvl10 = false;
+    private bool increasedPoolLvl5 = false;
 
     [SerializeField]
     private Transform enemiesContainer;
     private Queue<GameObject> enemyPool = new Queue<GameObject>();
     private List<GameObject> activeEnemies = new List<GameObject>();
+    private ILevelTracker levelTracker;
 
     private void Awake()
     {
         enemiesContainer = transform.Find("Enemies");
-
+        levelTracker = FindAnyObjectByType<LevelingSystem>();
         Instance = this;
         InitializePool();
     }
 
     public GameObject GetPooledEnemy()
     {
+    
         GameObject pooledEnemy;
         if (enemyPool.Count > 0)
         {
@@ -43,6 +49,34 @@ public class EnemyPoolManager : MonoBehaviour
 
     public void ReturnEnemyToPool(GameObject enemy)
     {
+        if(!increasedPoolLvl20)
+        {
+            if(levelTracker.getLevel() >= 20)
+            {
+                poolSize = 200;
+                InitializePool();
+                increasedPoolLvl20 = true;
+            }
+        }
+        if(!increasedPoolLvl5)
+        {
+            if(levelTracker.getLevel() >= 5)
+            {
+                poolSize = 60;
+                InitializePool();
+                increasedPoolLvl5 = true;
+            }
+        }
+        if(!increasedPoolLvl10)
+        {
+            if(levelTracker.getLevel() >= 10)
+            {
+                poolSize = 130;
+                InitializePool();
+                increasedPoolLvl10 = true;
+            }
+        }
+
         Debug.Log("Returning enemy to pool Manager");
 
         enemy.SetActive(false);
@@ -64,6 +98,7 @@ public class EnemyPoolManager : MonoBehaviour
 
     private void InitializePool()
     {
+
         for (int i = 0; i < poolSize; i++)
         {
             GameObject randomPrefab = RandomPrefab();

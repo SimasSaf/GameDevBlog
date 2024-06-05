@@ -131,8 +131,6 @@ public class EnemySpawnManager : MonoBehaviour, ILevelingSystemObserver
 
         return spawnPoint;
     }
-
-    // ILevelingSystemObserver implementation
     public void OnLevelUp(int newLevel) { }
 
     public void OnReset()

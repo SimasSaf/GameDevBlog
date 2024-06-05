@@ -123,7 +123,6 @@ public class MenuUiController
         }
         else
         {
-            // Check one level deeper
             foreach (Transform child in menu.transform)
             {
                 firstSelectable = child.GetComponentInChildren<Selectable>();
