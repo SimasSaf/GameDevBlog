@@ -20,7 +20,7 @@ public class UpgradeUI : MonoBehaviour
         iBulletSpawnManager = FindObjectOfType<BulletSpawnManager>();
 
         // Initialize upgrades
-        InitializeUpgrades(numberOfUpgrades, new Vector3(-150, 0, 0));
+        InitializeUpgrades(numberOfUpgrades, new Vector3(-220, 0, 0));
     }
 
     void Start()
@@ -31,7 +31,6 @@ public class UpgradeUI : MonoBehaviour
 
     private void InitializeUpgrades(int count, Vector3 startPosition)
     {
-        Debug.Log("Initializing upgrades");
         GameObject upgradeMenu = GameObject.Find("UpgradeMenu");
         if (upgradeMenu == null)
         {

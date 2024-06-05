@@ -41,7 +41,6 @@ public class EarthHealthManager : MonoBehaviour, IEarthHealthManagerOR
     {
         if (collider.CompareTag("Enemy"))
         {
-            Debug.Log("Earth triggered with Enemy");
             TakeDamage();
         }
     }

@@ -38,6 +38,8 @@ public class MenuUiController
     private GameObject gameOverScreenGO;
     private GameObject upgradeMenuGO;
 
+    private LevelingSystem levelingSystem;
+
     private void Awake()
     {
         pauseMenuGO = GameObject.Find("PauseMenu");
@@ -57,6 +59,8 @@ public class MenuUiController
         iAudioManager = FindObjectOfType<AudioManager>();
         iHealthManager = FindObjectOfType<EarthHealthManager>();
         iLevelingSystem = FindObjectOfType<LevelingSystem>();
+
+        levelingSystem = FindAnyObjectByType<LevelingSystem>();
     }
 
     private void Start()
@@ -115,7 +119,6 @@ public class MenuUiController
         Selectable firstSelectable = menu.GetComponentInChildren<Selectable>();
         if (firstSelectable != null)
         {
-            Debug.Log("first: " + firstSelectable.name);
             eventSystem.SetSelectedGameObject(firstSelectable.gameObject);
         }
         else
@@ -126,14 +129,10 @@ public class MenuUiController
                 firstSelectable = child.GetComponentInChildren<Selectable>();
                 if (firstSelectable != null)
                 {
-                    Debug.Log("one level deeper: " + firstSelectable.name);
                     eventSystem.SetSelectedGameObject(firstSelectable.gameObject);
                     return;
                 }
             }
-
-            // If no Selectable found in immediate or one level deeper
-            Debug.LogError("No selectable component found in " + menu.name);
         }
     }
 
@@ -168,6 +167,8 @@ public class MenuUiController
         enemyPoolManager.DeactivateAllEnemies();
 
         iCameraMovement.MoveToStart();
+
+        levelingSystem.NotifyOnReset();
 
         iUIActivator.ActivateMainMenu();
         SetFirstSelected(mainMenuGO);

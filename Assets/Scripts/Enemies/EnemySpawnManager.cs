@@ -70,7 +70,14 @@ public class EnemySpawnManager : MonoBehaviour, ILevelingSystemObserver
         if (enemyInstance != null)
         {
             enemyInstance.transform.position = spawnPoint;
-            enemyInstance.transform.LookAt(earthTransform.position);
+
+            Vector3 directionToEarth = (
+                earthTransform.position - enemyInstance.transform.position
+            ).normalized;
+
+            Quaternion lookRotation = Quaternion.LookRotation(Vector3.forward, directionToEarth);
+
+            enemyInstance.transform.rotation = lookRotation;
 
             EnemyMovement enemyMovement = enemyInstance.GetComponent<EnemyMovement>();
             if (enemyMovement != null)
@@ -136,7 +143,7 @@ public class EnemySpawnManager : MonoBehaviour, ILevelingSystemObserver
         spawnDistanceMin = 0f;
         spawnDistanceMax = 10f;
         enemiesPerSpawn = 30;
-        nextSpawnTime = 1f;
+        nextSpawnTime = 0.1f;
     }
 
     public void OnAddExperience(int experience, int experienceToNextLevel) { }

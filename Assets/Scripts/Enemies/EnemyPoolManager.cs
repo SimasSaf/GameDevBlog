@@ -43,6 +43,8 @@ public class EnemyPoolManager : MonoBehaviour
 
     public void ReturnEnemyToPool(GameObject enemy)
     {
+        Debug.Log("Returning enemy to pool Manager");
+
         enemy.SetActive(false);
         if (!enemyPool.Contains(enemy))
         {
@@ -66,6 +68,7 @@ public class EnemyPoolManager : MonoBehaviour
         {
             GameObject randomPrefab = RandomPrefab();
             GameObject enemy = Instantiate(randomPrefab, enemiesContainer);
+
             enemy.SetActive(false);
             enemyPool.Enqueue(enemy);
         }

@@ -5,7 +5,7 @@ public class Explosion : MonoBehaviour
     public int explosionDamage;
     public int fireLevel;
     public float explosionRadius;
-    public float duration = 0.2f; // Duration before the explosion disappears
+    public float duration = 0.1f; // Duration before the explosion disappears
 
     private void Start()
     {
@@ -22,7 +22,6 @@ public class Explosion : MonoBehaviour
 
         Destroy(gameObject, duration);
 
-        // Apply damage and set enemies on fire within the explosion radius
         Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
         foreach (Collider2D hitCollider in hitColliders)
         {

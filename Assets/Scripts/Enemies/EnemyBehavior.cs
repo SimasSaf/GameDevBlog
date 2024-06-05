@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System.Collections;
 
 public class EnemyBehavior : MonoBehaviour
 {
@@ -29,9 +30,27 @@ public class EnemyBehavior : MonoBehaviour
     private bool isOnFire = false;
     private float fireDamageTimer;
 
+    private Animator anim;
+    private Collider2D collider;
+    private Rigidbody2D rigidbody;
+    private SpriteRenderer spriteRenderer;
+
     void Awake()
     {
         leveling = FindAnyObjectByType<LevelingSystem>();
+        anim = GetComponent<Animator>();
+        collider = GetComponent<Collider2D>();
+        rigidbody = GetComponent<Rigidbody2D>();
+
+        Transform mainTransform = transform.Find("Main");
+        if (mainTransform != null)
+        {
+            spriteRenderer = mainTransform.GetComponent<SpriteRenderer>();
+        }
+        else
+        {
+            Debug.LogWarning("'Main' object not found as a child of this prefab.");
+        }
     }
 
     void OnEnable()
@@ -39,6 +58,7 @@ public class EnemyBehavior : MonoBehaviour
         // Resetting state for when we again reuse this
         isOnFire = false;
         fireDamageTimer = fireDamageInterval;
+        ResetState();
     }
 
     void Update()
@@ -74,7 +94,6 @@ public class EnemyBehavior : MonoBehaviour
     {
         if (collider.CompareTag("Earth"))
         {
-            Debug.Log("Enemy triggered with Earth");
             Die();
         }
     }
@@ -87,13 +106,46 @@ public class EnemyBehavior : MonoBehaviour
 
     private void Die()
     {
+        anim.ResetTrigger("FlyTrigger");
+        if (collider != null)
+        {
+            collider.enabled = false;
+        }
+        else
+        {
+            Debug.LogWarning("Collider component not found!");
+        }
+
+        if (anim != null)
+        {
+            anim.SetTrigger("DieTrigger");
+            StartCoroutine(WaitForStaticPeriod());
+        }
+        else
+        {
+            Debug.LogError("Animator component not found!");
+        }
+
         if (enemy.fireLevel >= 3)
         {
             Explode();
         }
+
         isOnFire = false;
-        EnemyPoolManager.Instance.ReturnEnemyToPool(gameObject);
         leveling.AddExperience(experienceGiven);
+        visuallyTurnNormal();
+    }
+
+    private IEnumerator WaitForStaticPeriod()
+    {
+        yield return new WaitForSeconds(1.5f);
+
+        if (collider != null)
+        {
+            collider.enabled = true;
+        }
+
+        EnemyPoolManager.Instance.ReturnEnemyToPool(gameObject);
     }
 
     public void TakeDamage(int damage)
@@ -118,7 +170,7 @@ public class EnemyBehavior : MonoBehaviour
         Explosion explosionScript = explosion.GetComponent<Explosion>();
         if (explosionScript != null)
         {
-            explosionDamage = explosionDamage * enemy.fireLevel - 40; // this is done so that it starts off as 10, a little hack (potential for bugs :D)
+            explosionDamage = explosionDamage * enemy.fireLevel - 20;
 
             explosionScript.Initialize(explosionDamage, enemy.fireLevel, explosionRadius);
         }
@@ -129,9 +181,34 @@ public class EnemyBehavior : MonoBehaviour
         if (fireLevel <= 0 || isOnFire)
             return;
 
+        visuallyTurnRed();
         enemy.fireLevel = fireLevel;
         isOnFire = true;
         fireDamageTimer = fireDamageInterval;
+    }
+
+    void visuallyTurnRed()
+    {
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.color = Color.red;
+        }
+        else
+        {
+            Debug.LogWarning("SpriteRenderer component not found on 'main' object.");
+        }
+    }
+
+    void visuallyTurnNormal()
+    {
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.color = Color.white;
+        }
+        else
+        {
+            Debug.LogWarning("SpriteRenderer component not found on 'main' object.");
+        }
     }
 
     void ShowDamageNumber(int damage)
@@ -145,5 +222,20 @@ public class EnemyBehavior : MonoBehaviour
         dmgNumber.GetComponent<TextMeshPro>().text = damage.ToString();
 
         Destroy(dmgNumber, 2f);
+    }
+
+    private void ResetState()
+    {
+        visuallyTurnNormal();
+        if (anim != null)
+        {
+            anim.ResetTrigger("DieTrigger");
+            anim.SetTrigger("FlyTrigger");
+        }
+
+        if (collider != null)
+        {
+            collider.enabled = true;
+        }
     }
 }

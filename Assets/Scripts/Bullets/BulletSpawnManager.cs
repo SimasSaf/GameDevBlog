@@ -40,10 +40,6 @@ public class BulletSpawnManager
         splitLevel = 0;
         fireLevel = 0;
 
-        Debug.Log(
-            $"Initial Damage: {damage}, Initial Bullet Speed: {bulletSpeed}, Initial Fire Rate: {fireRate}"
-        );
-
         iSoundEffectManager = FindAnyObjectByType<AudioManager>();
         iBulletPoolManager = FindAnyObjectByType<BulletPoolManager>();
         levelingSystem = FindAnyObjectByType<LevelingSystem>();

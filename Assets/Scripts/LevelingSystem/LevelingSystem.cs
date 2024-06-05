@@ -55,7 +55,7 @@ public class LevelingSystem : MonoBehaviour, ILevelingSystemOR, ILeveling, ILeve
         }
     }
 
-    private void NotifyOnReset()
+    public void NotifyOnReset()
     {
         foreach (ILevelingSystemObserver observer in observers)
         {
