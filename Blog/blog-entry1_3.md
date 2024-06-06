@@ -1,4 +1,4 @@
-# First Blog Entry
+# First Blog Entry (#3)
 In this post the process made so far will be covered an the reasoning behind decisions.
 
 ## Hierarchy

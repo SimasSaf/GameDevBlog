@@ -1,4 +1,4 @@
-# Second Blog Entry (The Losening of the Mind)
+# Second Blog Entry (The Losening of the Mind) (#4)
 
 So i had a little breakdown when looking at my code and ended up rewriting the logic until im at least somewhat satisfied.
 

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyPoolManager : MonoBehaviour
+public class EnemyPoolManager : MonoBehaviour, ILevelingSystemObserver
 {
     public static EnemyPoolManager Instance;
 
@@ -10,7 +10,7 @@ public class EnemyPoolManager : MonoBehaviour
 
     [SerializeField]
     private int poolSize = 30;
-        private bool increasedPoolLvl20 = false;
+    private bool increasedPoolLvl20 = false;
 
     private bool increasedPoolLvl10 = false;
     private bool increasedPoolLvl5 = false;
@@ -31,7 +31,6 @@ public class EnemyPoolManager : MonoBehaviour
 
     public GameObject GetPooledEnemy()
     {
-    
         GameObject pooledEnemy;
         if (enemyPool.Count > 0)
         {
@@ -49,27 +48,27 @@ public class EnemyPoolManager : MonoBehaviour
 
     public void ReturnEnemyToPool(GameObject enemy)
     {
-        if(!increasedPoolLvl20)
+        if (!increasedPoolLvl20)
         {
-            if(levelTracker.getLevel() >= 20)
+            if (levelTracker.getLevel() >= 20)
             {
                 poolSize = 200;
                 InitializePool();
                 increasedPoolLvl20 = true;
             }
         }
-        if(!increasedPoolLvl5)
+        if (!increasedPoolLvl5)
         {
-            if(levelTracker.getLevel() >= 5)
+            if (levelTracker.getLevel() >= 5)
             {
                 poolSize = 60;
                 InitializePool();
                 increasedPoolLvl5 = true;
             }
         }
-        if(!increasedPoolLvl10)
+        if (!increasedPoolLvl10)
         {
-            if(levelTracker.getLevel() >= 10)
+            if (levelTracker.getLevel() >= 10)
             {
                 poolSize = 130;
                 InitializePool();
@@ -98,7 +97,6 @@ public class EnemyPoolManager : MonoBehaviour
 
     private void InitializePool()
     {
-
         for (int i = 0; i < poolSize; i++)
         {
             GameObject randomPrefab = RandomPrefab();
@@ -119,4 +117,30 @@ public class EnemyPoolManager : MonoBehaviour
     {
         return enemyPool.Count > 0;
     }
+
+    public void OnLevelUp(int level) { }
+
+    public void OnReset()
+    {
+        poolSize = 30;
+        increasedPoolLvl5 = false;
+        increasedPoolLvl10 = false;
+        increasedPoolLvl20 = false;
+
+        foreach (GameObject enemy in enemyPool)
+        {
+            Destroy(enemy);
+        }
+        enemyPool.Clear();
+
+        foreach (GameObject enemy in activeEnemies)
+        {
+            Destroy(enemy);
+        }
+        activeEnemies.Clear();
+
+        InitializePool();
+    }
+
+    public void OnAddExperience(int experience, int experienceToNextLevel) { }
 }
