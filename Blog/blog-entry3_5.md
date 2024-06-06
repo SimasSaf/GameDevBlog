@@ -34,7 +34,6 @@ Example how i made it in illustrator:
 
 Then i cut it in multiple parts in unity and use them to animate my prefab through the animator controller. The death animation is done the same way. Fir triggering the states I use the trigger in the animator then set it when needed and reset it when it has to be returned to pool.
 
-
 ## Balancing
 
 Not sure if i am still perfectly satisfied with the balancing, i had a few friends test the game and made some changes. Before the start was quite diffucult while later the game becomes  abreeze. Changed some damage numbers, enemy scaling to fit better. Now the game also has a increasing enemy count as the levels progress. After level 5, 10, 20 more enemies are spawned.

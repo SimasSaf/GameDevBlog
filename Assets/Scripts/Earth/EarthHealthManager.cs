@@ -1,11 +1,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EarthHealthManager : MonoBehaviour, IEarthHealthManagerOR
+public class EarthHealthManager : MonoBehaviour, IEarthHealthManagerOR, ILevelingSystemObserver
 {
     public int maxHealth = 10;
     private int currentHealth;
     private List<IHealthObserver> observers = new List<IHealthObserver>();
+    private LevelingSystem levelingSystem;
+
+    void Awake()
+    {
+        levelingSystem = FindAnyObjectByType<LevelingSystem>();
+
+        if (levelingSystem != null)
+        {
+            levelingSystem.RegisterObserver(this);
+        }
+    }
 
     void Start()
     {
@@ -75,4 +86,13 @@ public class EarthHealthManager : MonoBehaviour, IEarthHealthManagerOR
             observer.OnFatalDamageTaken();
         }
     }
+
+    public void OnLevelUp(int level) { }
+
+    public void OnReset()
+    {
+        maxHealth = 10;
+    }
+
+    public void OnAddExperience(int experience, int experienceToNextLevel) { }
 }
